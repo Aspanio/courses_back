@@ -2,6 +2,7 @@
 const app = require('../httpServer');
 const debug = require('debug')('courses-back:server');
 const http = require('http');
+const runnerDb = require('./db');
 
 const port = normalizePort(process.env.PORT || '4000');
 app.set('port', port);
@@ -59,3 +60,5 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+runnerDb();

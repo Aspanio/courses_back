@@ -9,10 +9,10 @@ const indexRouter = require('./routes/index');
 
 const app = express();
 
-mongoose.connect('mongodb://admin:qwe123@ds127736.mlab.com:27736/karpachoff');
-let db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', () => console.log('DB connected sucsessfuly!'));
+// mongoose.connect('mongodb://admin:qwe123@ds127736.mlab.com:27736/karpachoff');
+// let db = mongoose.connection;
+// db.on('error', console.error.bind(console, 'connection error:'));
+// db.once('open', () => console.log('DB connected sucsessfuly!'));
 
 app.use(logger('dev'));
 app.use(express.json());
