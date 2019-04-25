@@ -196,8 +196,9 @@ router.get('/module/:id', async function(req, res, next) {
   try {
     const _id = req.params.id;
     console.log(_id)
-    const module = await Module.find({_id}).populate(['Task', 'Checklist', 'Attention']).exec();
-    console.log(module);
+    const module = await Module.find({_id}).populate(['tasks','extra_tasks','dangerlist' ,'checklist', 'attentions']).exec();
+    const modules = module.toClient();
+    console.log(modules);
     res.send(module);
   } catch(err) {
     next(err);
