@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const db = require('../storage/db');
 
-const uri = require('../config/db').db.uri;
-const options = require('../config/db').db.connect;
+const uri = require('../config').get('db:uri');
+const options = require('../config').get('db:connect');
 
 const init = () => new Promise((resolve, reject) => {
   mongoose.connect(uri, options);

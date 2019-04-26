@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const CourseSchema = new Schema({
     header: String,
-    module_ids: [{type: ObjectId, unique: true}]
+    module_ids: [{type: ObjectId, ref: 'Module'}]
 });
 
 const Course = mongoose.model('Course', CourseSchema);

@@ -16,13 +16,68 @@ function wrap(fn) {
   };
 }
 
-router.get('/', function(req, res, next) {
-  console.log('/')
-  res.json({
-    themes: 123,
-    themesDone: 16
-  })
+router.get('/courses', async function(req, res, next) {
+  try{
+    const courses = await Course.find({});
+    console.log(courses);
+    res.send(courses);
+  } catch(err) {
+    next(err);
+  }
 });
+
+router.get('/modules', async function(req, res, next) {
+  try {
+    const modules = await Module.find({});
+    res.json(modules);
+  } catch (err) {
+    next(err);
+  }
+})
+
+router.get('/tasks', wrap(async function(req, res, next) {
+  try {
+    const data = await Task.find({})
+    console.log(data)
+    return data;
+  } catch(err) {
+    next(err)
+  }
+}))
+
+router.get('/checklist', wrap(async function(req, res, next) {
+  try {
+    const data = await Checklist.find({})
+    return data;
+  } catch(err) {
+    next(err)
+  }
+}))
+
+router.get('/attention', async function(req, res, next) {
+  try {
+    const data = await Attention.find({})
+    console.log(data)
+    res.send(data);
+  } catch(err) {
+    next(err)
+  }
+})
+
+router.get('/module/:id', async function(req, res, next) {
+  try {
+    const _id = req.params.id;
+    console.log(_id)
+    const module = await Module.findById({_id}).populate(['tasks','extra_tasks','dangerlist' ,'checklist', 'attentions']).exec();
+    const data = module.toObject({ getters: true, virtuals: true });
+    console.log(data)
+    res.send(data);
+  } catch(err) {
+    next(err);
+  }
+})
+
+//POSTS
 
 router.post('/user', function(req, res, next) {
   console.log('POST -> /user')
@@ -67,12 +122,14 @@ router.post('/task', async function(req, res, next) {
       task_duration,
       task_img,
       task_view,
+      task_type,
     } = req.body;
     const newTask = await new Task({
       duration: task_duration,
       header: task_text,
       img: task_img,
       view: task_view,
+      type: task_type,
     });
     const task = await newTask.save();
     console.log(task);
@@ -118,7 +175,7 @@ router.post('/attention', async function(req, res, next) {
     const { attention_header, attention_text, attention_img } = req.body;
     const newAttention = await new Attention({
       header: attention_header,
-      text: attention_text,
+      content: attention_text,
       img: attention_img,
     })
     const attention = await newAttention.save();
@@ -140,66 +197,6 @@ router.post('/course', async function(req, res, next) {
     const course = newCourse.save();
     console.log(course);
     res.send('Новый курс добавлен успешно!');
-  } catch(err) {
-    next(err);
-  }
-})
-
-
-router.get('/modules', async function(req, res, next) {
-  try {
-    const modules = await Module.find({});
-    res.json(modules);
-  } catch (err) {
-    next(err);
-  }
-})
-
-router.get('/modules/tasks', function(req, res, next) {
-  console.log('tasks back')
-  res.json([
-    {text: 'Тут задача 1'},
-    {text: 'Тут задача 2'}
-  ])
-})
-
-router.get('/tasks', wrap(async function(req, res, next) {
-  try {
-    const data = await Task.find({})
-    console.log(data)
-    return data;
-  } catch(err) {
-    next(err)
-  }
-}))
-
-router.get('/checklist', wrap(async function(req, res, next) {
-  try {
-    const data = await Checklist.find({})
-    return data;
-  } catch(err) {
-    next(err)
-  }
-}))
-
-router.get('/attention', async function(req, res, next) {
-  try {
-    const data = await Attention.find({})
-    console.log(data)
-    res.send(data);
-  } catch(err) {
-    next(err)
-  }
-})
-
-router.get('/module/:id', async function(req, res, next) {
-  try {
-    const _id = req.params.id;
-    console.log(_id)
-    const module = await Module.find({_id}).populate(['tasks','extra_tasks','dangerlist' ,'checklist', 'attentions']).exec();
-    const modules = module.toClient();
-    console.log(modules);
-    res.send(module);
   } catch(err) {
     next(err);
   }

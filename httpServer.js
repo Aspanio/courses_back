@@ -2,17 +2,11 @@ const createError = require('http-errors');
 const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
 
 const indexRouter = require('./routes/index');
-// const fetchRouter = require('./routes/fetchData');
+const deleteRouter = require('./routes/delete');
 
 const app = express();
-
-// mongoose.connect('mongodb://admin:qwe123@ds127736.mlab.com:27736/karpachoff');
-// let db = mongoose.connection;
-// db.on('error', console.error.bind(console, 'connection error:'));
-// db.once('open', () => console.log('DB connected sucsessfuly!'));
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -21,7 +15,7 @@ app.use(bodyParser.json());
 
 //ROUTES
 app.use('/get', indexRouter);
-// app.use('/get', fetchRouter);
+app.use('/get/delete', deleteRouter);
 
 app.use(function(req, res, next) {
   next(createError(404));
