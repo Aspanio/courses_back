@@ -6,6 +6,9 @@
     "start": "cross-env NODE_PATH=. node ./bin/www",
     "devstart": "cross-env NODE_PATH=. NODE_ENV=development node --inspect=9898 ./bin/www"
   },
+  "engines": {
+    "node": "10.15.3"
+  },
   "dependencies": {
     "body-parser": "^1.18.3",
     "cookie-parser": "~1.4.3",
